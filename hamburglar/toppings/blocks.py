@@ -13,5 +13,3 @@ from .ignorefieldtopping import IgnoreFieldTopping
 class BlocksTopping(IgnoreFieldTopping):
     KEY = "blocks.block"
     IGNORE = ['class', 'field']
-
-    
