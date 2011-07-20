@@ -52,7 +52,7 @@ if __name__ == '__main__':
     try:
         opts, args = getopt.gnu_getopt(
             sys.argv[1:],
-            "o:l",
+            "o:c",
             [
                 "output=",
                 "compact"
