@@ -79,23 +79,18 @@ if __name__ == '__main__':
         print "Error: The Hamburglar needs to be fed burgers\n"
         usage()
         sys.exit(3)
-      
-    lines = sys.stdin.readlines()
+
+    try:
+        versions = json.load(sys.stdin)
+    except ValueError, err:
+        print "Error: Invalid input (" + str(err) + ")\n"
+        usage()
+        sys.exit(5)
     
-    if len(lines) < 2:
+    if len(versions) < 2:
         print "Error: The Hamburglar needs more burgers\n"
         usage()
         sys.exit(2)
-    elif len(lines) > 2:
-        print "Error: Burger input needs to be compact\n"
-        usage()
-        sys.exit(4)
-
-    try:
-        versions = [json.loads(lines[0]), json.loads(lines[1])]
-    except ValueError, err:
-        print "Error: Invalid input (" + str(err) + ")"
-        sys.exit(5)
     
     # Compare versions
     aggregate = {}

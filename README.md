@@ -7,4 +7,4 @@ Currently the only way to use Hamburglar is to pipe in output from [Burger](http
 
     $ python Burger/munch.py -c minecraft.1.5.jar minecraft.1.6.jar | python Hamburglar/hamburglar.py
 
-Hamburglar expects two lines containing a JSON object each. Using [Burger](https://github.com/TkTech/Burger)'s -t option is possible as missing toppings are ignored by Hamburglar.
+Hamburglar expects a JSON list conataining two objects. Using [Burger's](https://github.com/TkTech/Burger) -t option is possible as missing toppings are ignored by Hamburglar.
