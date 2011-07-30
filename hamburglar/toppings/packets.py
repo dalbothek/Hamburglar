@@ -10,8 +10,7 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 from .ignorefieldtopping import IgnoreFieldTopping
 
+
 class PacketsTopping(IgnoreFieldTopping):
     KEY = "packets.packet"
-    IGNORE = ['class']
-
-    
+    IGNORE = ('class', 'field', 'condition')

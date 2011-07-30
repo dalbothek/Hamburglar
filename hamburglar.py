@@ -10,12 +10,15 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 import os
 import sys
-import getopt 
+import getopt
 import json
 from collections import deque
 
+
 def usage():
-    print "Example usage: Burger/munch.py -c 1.5.jar 1.6.jar | Hamburglar/hamburglar.py"
+    print "Example usage:",
+    print "Burger/munch.py -c 1.5.jar 1.6.jar | Hamburglar/hamburglar.py"
+
 
 def import_toppings():
     """
@@ -36,7 +39,7 @@ def import_toppings():
             from_list.append(file_[:-3])
 
     imports = __import__("hamburglar.toppings", fromlist=from_list)
-    
+
     toppings = imports.topping.Topping.__subclasses__()
     subclasses = toppings
     while len(subclasses) > 0:
@@ -45,8 +48,9 @@ def import_toppings():
             newclasses += subclass.__subclasses__()
         subclasses = newclasses
         toppings += subclasses
-    
+
     return toppings
+
 
 if __name__ == '__main__':
     try:
@@ -61,7 +65,7 @@ if __name__ == '__main__':
     except getopt.GetoptError, err:
         print str(err)
         sys.exit(1)
-        
+
     # Default options
     output = sys.stdout
     compact = False
@@ -71,9 +75,9 @@ if __name__ == '__main__':
             output = open(a, "ab")
         elif o in ("-c", "--compact"):
             compact = True
-            
+
     toppings = import_toppings()
-        
+
     # Load JSON objects from stdin
     if sys.stdin.isatty():
         print "Error: The Hamburglar needs to be fed burgers\n"
@@ -86,36 +90,38 @@ if __name__ == '__main__':
         print "Error: Invalid input (" + str(err) + ")\n"
         usage()
         sys.exit(5)
-    
+
     if len(versions) < 2:
         print "Error: The Hamburglar needs more burgers\n"
         usage()
         sys.exit(2)
-    
+
     # Compare versions
     aggregate = {}
-    
+
     for topping in toppings:
-        if topping.KEY == None: continue
+        if topping.KEY == None:
+            continue
         keys = topping.KEY.split(".")
         obj1 = versions[0]
         obj2 = versions[1]
         target = aggregate
         skip = False
         for key in keys:
-            if not (obj1.has_key(key) and obj2.has_key(key)):
+            if not (key in obj1 and key in obj2):
                 skip = True
                 break
             obj1 = obj1[key]
             obj2 = obj2[key]
-        if skip: continue
+        if skip:
+            continue
         for key in keys:
-            if not target.has_key(key):
+            if not key in target:
                 target[key] = {}
             target = target[key]
-        
+
         target.update(topping().filter(obj1, obj2))
-        
+
     # Output results
     if not compact:
         json.dump(aggregate, output, sort_keys=True, indent=4)

@@ -10,6 +10,7 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 from .ignorefieldtopping import IgnoreFieldTopping
 
+
 class BlocksTopping(IgnoreFieldTopping):
     KEY = "blocks.block"
-    IGNORE = ['class', 'field']
+    IGNORE = ('class', 'field')

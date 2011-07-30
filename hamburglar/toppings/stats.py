@@ -10,6 +10,6 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 from .topping import Topping
 
+
 class StatsTopping(Topping):
     KEY = "stats"
-        

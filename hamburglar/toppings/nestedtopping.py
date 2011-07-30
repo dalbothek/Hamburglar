@@ -10,18 +10,23 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 from .topping import Topping
 
+
 class NestedTopping(Topping):
-    
+
     def filter(self, object1, object2):
         changed = {}
-        for key in object1.keys():
-            if object2.has_key(key):
+        for key in object1:
+            if key in object2:
                 if not self.equal(object1[key], object2[key]):
-                    changed.update({key: super(NestedTopping, self).filter(object1[key], object2[key])})
+                    changed.update(
+                        {key: super(NestedTopping, self).filter(
+                            object1[key], object2[key])
+                         }
+                    )
             else:
                 changed.update({key: [object1[key], None]})
-        for key in object2.keys():
-            if not object1.has_key(key):
+        for key in object2:
+            if not key in object1:
                 changed.update({key: [None, object2[key]]})
-                
+
         return changed

@@ -10,22 +10,25 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 from .ignorefieldtopping import IgnoreFieldTopping
 
+
 class RecipesTopping(IgnoreFieldTopping):
     KEY = "recipes"
     IGNORE = ['raw']
-    
+
     def filter(self, object1, object2):
         changed = {}
-        for key in object1.keys():
-            if not object1[key].has_key("name"): continue
-            if object2.has_key(key):
+        for key in object1:
+            if not "name" in object1[key]:
+                continue
+            if key in object2:
                 if not self.equal(object1[key], object2[key]):
                     changed.update({key: [object1[key], object2[key]]})
             else:
                 changed.update({key: [object1[key], None]})
-        for key in object2.keys():
-            if not object2[key].has_key("name"): continue
-            if not object1.has_key(key):
+        for key in object2:
+            if not "name" in object2[key]:
+                continue
+            if not key in object1:
                 changed.update({key: [None, object2[key]]})
-                
+
         return changed

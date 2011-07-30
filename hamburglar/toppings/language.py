@@ -10,6 +10,6 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 from .nestedtopping import NestedTopping
 
+
 class LanguageTopping(NestedTopping):
     KEY = "language"
-        
