@@ -115,12 +115,12 @@ if __name__ == '__main__':
             obj2 = obj2[key]
         if skip:
             continue
-        for key in keys:
+        for key in keys[:-1]:
             if not key in target:
                 target[key] = {}
             target = target[key]
 
-        target.update(topping().filter(obj1, obj2))
+        target[keys[-1]] = topping().filter(obj1, obj2)
 
     # Output results
     if not compact:

@@ -3,7 +3,8 @@ Hamburglar is a utility capable of automatically comparing different versions of
 for the purpose of writing the protocol specification, interoperability, and other neat uses. The needed information is gathered with [Burger](https://github.com/TkTech/Burger) and then piped to Hamburglar.
 
 ## Usage
-Currently the only way to use Hamburglar is to pipe in output from [Burger](https://github.com/TkTech/Burger)
+Currently the only way to use Hamburglar is to pipe in output from [Burger](https://github.com/TkTech/Burger).<br />
+I recommend using my own [fork](https://github.com/sadimusi/Burger) of Burger which adds items, packet contents and better recipes
 
     $ python Burger/munch.py -c minecraft.1.5.jar minecraft.1.6.jar | python Hamburglar/hamburglar.py
 

@@ -8,27 +8,84 @@ To Public License, Version 2, as published by Sam Hocevar. See
 http://sam.zoy.org/wtfpl/COPYING for more details.
 """
 
-from .ignorefieldtopping import IgnoreFieldTopping
+from .ignorefieldtopping import Topping
 
 
-class RecipesTopping(IgnoreFieldTopping):
+class RecipesTopping(Topping):
     KEY = "recipes"
-    IGNORE = ['raw']
 
     def filter(self, object1, object2):
         changed = {}
-        for key in object1:
-            if not "name" in object1[key]:
+
+        def make_map(recipes):
+                rec_map = {}
+                for rec in recipes:
+                    key = ""
+                    for row in rec["shape"]:
+                        for col in row:
+                            if ":" in str(col):
+                                key += "x."
+                            else:
+                                key += str(col) + "."
+                        key += ","
+                    rec_map[key] = rec
+                return rec_map
+
+        for id in object1:
+            if ":" in id:
                 continue
-            if key in object2:
-                if not self.equal(object1[key], object2[key]):
-                    changed.update({key: [object1[key], object2[key]]})
-            else:
-                changed.update({key: [object1[key], None]})
-        for key in object2:
-            if not "name" in object2[key]:
+
+            if id not in object2:
+                changed[id] = [object1[id], None]
                 continue
-            if not key in object1:
-                changed.update({key: [None, object2[key]]})
+
+            obj = object1[id]
+            if isinstance(obj, dict):
+                obj = [obj]
+
+            obj2 = make_map(object2[id])
+            obj1 = make_map(obj)
+
+            changed1 = []
+            changed2 = []
+
+            for key in obj1:
+                if key not in obj2:
+                    changed1.append(obj1[key])
+                    continue
+                if not self.equal(obj1[key], obj2[key]):
+                    changed1.append(obj1[key])
+                    changed2.append(obj2[key])
+
+            for key in obj2:
+                if key not in obj1:
+                    changed2.append(obj2[key])
+
+            if len(changed1) + len(changed2) != 0:
+                changed[id] = [changed1, changed2]
+
+        for id in object2:
+            if ":" in id:
+                continue
+
+            if id not in object1:
+                changed[id] = [None, object2[id]]
+                continue
 
         return changed
+
+    def equal(self, rec1, rec2):
+        if rec1["makes"] != rec2["makes"]:
+            return False
+        sh1 = rec1["shape"]
+        sh2 = rec2["shape"]
+        if len(sh1) != len(sh2):
+            return False
+        for i in range(len(sh1)):
+            if len(sh1[i]) != len(sh2[i]):
+                return False
+            for j in range(len(sh1[i])):
+                if (not (":" in str(sh1[i][j]) and ":" in str(sh2[i][j])) and
+                    sh1[i][j] != sh2[i][j]):
+                    return False
+        return True
