@@ -21,13 +21,20 @@ class RecipesTopping(Topping):
                 rec_map = {}
                 for rec in recipes:
                     key = ""
-                    for row in rec["shape"]:
-                        for col in row:
-                            if ":" in str(col):
+                    if rec["type"] == "shape":
+                        for row in rec["shape"]:
+                            for col in row:
+                                if ":" in str(col):
+                                    key += "x."
+                                else:
+                                    key += str(col) + "."
+                            key += ","
+                    else:
+                        for item in rec["ingredients"]:
+                            if ":" in str(item):
                                 key += "x."
                             else:
-                                key += str(col) + "."
-                        key += ","
+                                key += str(item) + "."
                     rec_map[key] = rec
                 return rec_map
 
@@ -75,17 +82,28 @@ class RecipesTopping(Topping):
         return changed
 
     def equal(self, rec1, rec2):
-        if rec1["makes"] != rec2["makes"]:
+        if rec1["amount"] != rec2["amount"]:
             return False
-        sh1 = rec1["shape"]
-        sh2 = rec2["shape"]
-        if len(sh1) != len(sh2):
+        if rec1["makes"]["id"] != rec2["makes"]["id"]:
             return False
-        for i in range(len(sh1)):
-            if len(sh1[i]) != len(sh2[i]):
+        if rec1["type"] != rec2["type"]:
+            return False
+        if rec1["type"] == "shape":
+            sh1 = rec1["shape"]
+            sh2 = rec2["shape"]
+            if len(sh1) != len(sh2):
                 return False
-            for j in range(len(sh1[i])):
-                if (not (":" in str(sh1[i][j]) and ":" in str(sh2[i][j])) and
-                    sh1[i][j] != sh2[i][j]):
+            for i in range(len(sh1)):
+                if len(sh1[i]) != len(sh2[i]):
                     return False
+                for j in range(len(sh1[i])):
+                    if (not (":" in str(sh1[i][j]) and ":" in str(sh2[i][j])) and
+                        sh1[i][j] != sh2[i][j]):
+                        return False
+        else:
+            i1 = [x["id"] if "id" in x else None for x in rec1["ingredients"]]
+            i2 = [x["id"] if "id" in x else None for x in rec2["ingredients"]]
+            for item in i1:
+                if item not in i2:
+                    return False                    
         return True
