@@ -97,7 +97,8 @@ class RecipesTopping(Topping):
                 if len(sh1[i]) != len(sh2[i]):
                     return False
                 for j in range(len(sh1[i])):
-                    if (not (":" in str(sh1[i][j]) and ":" in str(sh2[i][j])) and
+                    if (not (":" in str(sh1[i][j]) and
+                             ":" in str(sh2[i][j])) and
                         sh1[i][j] != sh2[i][j]):
                         return False
         else:
@@ -105,5 +106,5 @@ class RecipesTopping(Topping):
             i2 = [x["id"] if "id" in x else None for x in rec2["ingredients"]]
             for item in i1:
                 if item not in i2:
-                    return False                    
+                    return False
         return True

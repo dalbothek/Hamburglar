@@ -78,18 +78,28 @@ if __name__ == '__main__':
 
     toppings = import_toppings()
 
-    # Load JSON objects from stdin
-    if sys.stdin.isatty():
-        print "Error: The Hamburglar needs to be fed burgers\n"
-        usage()
-        sys.exit(3)
+    if len(args) > 0:
+        # Load JSON objects from files
+        versions = []
+        for path in args:
+            try:
+                versions += json.load(open(path, "r"))
+            except:
+                print "Error: Can't load ", path
+                sys.exit(3)
+    else:
+        # Load JSON objects from stdin
+        if sys.stdin.isatty():
+            print "Error: The Hamburglar needs to be fed burgers\n"
+            usage()
+            sys.exit(3)
 
-    try:
-        versions = json.load(sys.stdin)
-    except ValueError, err:
-        print "Error: Invalid input (" + str(err) + ")\n"
-        usage()
-        sys.exit(5)
+        try:
+            versions = json.load(sys.stdin)
+        except ValueError, err:
+            print "Error: Invalid input (" + str(err) + ")\n"
+            usage()
+            sys.exit(5)
 
     if len(versions) < 2:
         print "Error: The Hamburglar needs more burgers\n"
