@@ -8,7 +8,7 @@ I recommend using my own [fork](https://github.com/sadimusi/Burger) of Burger wh
 
     $ python Burger/munch.py -c minecraft.1.5.jar minecraft.1.6.jar | python Hamburglar/hamburglar.py
 
-Hamburglar expects a JSON list conataining two objects. Using [Burger's](https://github.com/TkTech/Burger) -t option is possible as missing toppings are ignored by Hamburglar.
+Hamburglar expects a JSON list containing two objects. Using [Burger's](https://github.com/TkTech/Burger) -t option is possible as missing toppings are ignored by Hamburglar.
 
     $ python Burger/munch.py -c -t recipes,blocks,identify minecraft.1.5.jar minecraft.1.6.jar | python Hamburglar/hamburglar.py
 
